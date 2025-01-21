@@ -18,31 +18,35 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
     <script src="js/main.js" type="module" defer></script>
 </head>
-<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100" x-data="{ darkMode: false }" :class="{ 'dark': darkMode }">
     <header class="bg-indigo-600 text-white py-4 shadow-lg">
-        <div class="container mx-auto px-4">
+        <div class="container mx-auto px-4 flex justify-between items-center">
             <h1 class="text-3xl font-bold flex items-center">
                 <span class="mdi mdi-wordpress mr-2"></span>
                 Advanced WordPress Toolkit Pro
             </h1>
+            <button @click="darkMode = !darkMode" class="p-2 rounded-full hover:bg-indigo-700 transition-colors duration-200">
+                <span class="mdi mdi-weather-night text-2xl" x-show="!darkMode"></span>
+                <span class="mdi mdi-weather-sunny text-2xl" x-show="darkMode"></span>
+            </button>
         </div>
     </header>
-    <nav class="bg-white dark:bg-gray-800 shadow-md">
+    <nav class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-10">
         <div class="container mx-auto px-4">
-            <ul class="flex space-x-4 py-3">
-                <li><a href="#importer" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"><span class="mdi mdi-file-import mr-1"></span> WXR Importer</a></li>
-                <li><a href="#analyzer" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"><span class="mdi mdi-magnify mr-1"></span> Website Analyzer</a></li>
-                <li><a href="#detector" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"><span class="mdi mdi-puzzle mr-1"></span> Theme & Plugin Detector</a></li>
-                <li><a href="#seo-optimizer" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"><span class="mdi mdi-chart-line mr-1"></span> SEO Optimizer</a></li>
-                <li><a href="#performance" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"><span class="mdi mdi-speedometer mr-1"></span> Performance Analyzer</a></li>
-                <li><a href="#security" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"><span class="mdi mdi-shield-check mr-1"></span> Security Scanner</a></li>
+            <ul class="flex flex-wrap justify-center space-x-4 py-3">
+                <li><a href="#importer" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200 transition-colors duration-200"><span class="mdi mdi-file-import mr-1"></span> WXR Importer</a></li>
+                <li><a href="#analyzer" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200 transition-colors duration-200"><span class="mdi mdi-magnify mr-1"></span> Website Analyzer</a></li>
+                <li><a href="#detector" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200 transition-colors duration-200"><span class="mdi mdi-puzzle mr-1"></span> Theme & Plugin Detector</a></li>
+                <li><a href="#seo-optimizer" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200 transition-colors duration-200"><span class="mdi mdi-chart-line mr-1"></span> SEO Optimizer</a></li>
+                <li><a href="#performance" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200 transition-colors duration-200"><span class="mdi mdi-speedometer mr-1"></span> Performance Analyzer</a></li>
+                <li><a href="#security" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200 transition-colors duration-200"><span class="mdi mdi-shield-check mr-1"></span> Security Scanner</a></li>
             </ul>
         </div>
     </nav>
     <main class="container mx-auto px-4 py-8">
-        <section id="importer" class="mb-12">
+        <section id="importer" class="mb-12 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-all duration-300">
             <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="mdi mdi-file-import mr-2"></span> WXR Importer</h2>
-            <div id="drop-zone" class="border-4 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition duration-300">
+            <div id="drop-zone" class="border-4 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-300">
                 <p class="text-xl mb-4"><span class="mdi mdi-cloud-upload text-4xl block mb-2"></span> Drag & Drop your WXR file here or</p>
                 <input type="file" id="file-input" accept=".xml" class="hidden">
                 <label for="file-input" class="bg-indigo-600 text-white py-2 px-4 rounded-lg cursor-pointer hover:bg-indigo-700 transition duration-300">Choose File</label>
@@ -80,100 +84,99 @@
             <div id="import-progress" class="hidden mt-8">
                 <h3 class="text-xl font-semibold mb-4">Import Progress</h3>
                 <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                    <div id="progress-bar" class="bg-green-600 h-2.5 rounded-full" style="width: 0%"></div>
+                    <div id="progress-bar" class="bg-green-600 h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
                 </div>
                 <p id="progress-text" class="mt-2 text-center">0% Complete</p>
             </div>
             <div id="import-results" class="hidden mt-8">
                 <h3 class="text-xl font-semibold mb-4">Import Results</h3>
-                <div id="results-container" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md"></div>
+                <div id="results-container" class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md"></div>
                 <button id="download-json" class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Download JSON</button>
             </div>
         </section>
         
-        <section id="analyzer" class="mb-12">
+        <section id="analyzer" class="mb-12 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-all duration-300">
             <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="mdi mdi-magnify mr-2"></span> Website Analyzer</h2>
             <form id="analyzer-form" class="mb-6">
-                <div class="flex">
-                    <input type="url" id="website-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600">
-                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-r-lg hover:bg-indigo-700 transition duration-300">Analyze</button>
+                <div class="flex flex-col md:flex-row">
+                    <input type="url" id="website-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 mb-2 md:mb-0 md:mr-2">
+                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition duration-300">Analyze</button>
                 </div>
             </form>
             <div id="analyzer-results" class="hidden">
                 <h3 class="text-xl font-semibold mb-4">Analysis Results</h3>
-                <div id="analysis-container" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-4"></div>
+                <div id="analysis-container" class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md mb-4"></div>
                 <canvas id="analysis-chart" width="400" height="200"></canvas>
                 <button id="generate-xml" class="mt-4 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300">Generate XML</button>
             </div>
         </section>
         
-        <section id="detector" class="mb-12">
+        <section id="detector" class="mb-12 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-all duration-300">
             <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="mdi mdi-puzzle mr-2"></span> Theme & Plugin Detector</h2>
             <form id="detector-form" class="mb-6">
-                <div class="flex">
-                    <input type="url" id="detector-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600">
-                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-r-lg hover:bg-indigo-700 transition duration-300">Detect</button>
+                <div class="flex flex-col md:flex-row">
+                    <input type="url" id="detector-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 mb-2 md:mb-0 md:mr-2">
+                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition duration-300">Detect</button>
                 </div>
             </form>
             <div id="detector-results" class="hidden">
                 <h3 class="text-xl font-semibold mb-4">Detection Results</h3>
-                <div id="theme-info" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-4"></div>
-                <div id="plugin-list" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md"></div>
+                <div id="theme-info" class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md mb-4"></div>
+                <div id="plugin-list" class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md"></div>
             </div>
         </section>
         
-        <section id="seo-optimizer" class="mb-12">
+        <section id="seo-optimizer" class="mb-12 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-all duration-300">
             <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="mdi mdi-chart-line mr-2"></span> SEO Optimizer</h2>
             <form id="seo-form" class="mb-6">
-                <div class="flex">
-                    <input type="url" id="seo-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600">
-                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-r-lg hover:bg-indigo-700 transition duration-300">Analyze SEO</button>
+                <div class="flex flex-col md:flex-row">
+                    <input type="url" id="seo-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 mb-2 md:mb-0 md:mr-2">
+                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition duration-300">Analyze SEO</button>
                 </div>
             </form>
             <div id="seo-results" class="hidden">
                 <h3 class="text-xl font-semibold mb-4">SEO Analysis Results</h3>
-                <div id="seo-score" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-4"></div>
-                <div id="seo-recommendations" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md"></div>
+                <div id="seo-score" class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md mb-4"></div>
+                <div id="seo-recommendations" class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md"></div>
             </div>
         </section>
         
-        <section id="performance" class="mb-12">
+        <section id="performance" class="mb-12 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-all duration-300">
             <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="mdi mdi-speedometer mr-2"></span> Performance Analyzer</h2>
             <form id="performance-form" class="mb-6">
-                <div class="flex">
-                    <input type="url" id="performance-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600">
-                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-r-lg hover:bg-indigo-700 transition duration-300">Analyze Performance</button>
+                <div class="flex flex-col md:flex-row">
+                    <input type="url" id="performance-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 mb-2 md:mb-0 md:mr-2">
+                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition duration-300">Analyze Performance</button>
                 </div>
             </form>
             <div id="performance-results" class="hidden">
                 <h3 class="text-xl font-semibold mb-4">Performance Analysis Results</h3>
-                <div id="performance-score" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-4"></div>
+                <div id="performance-score" class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md mb-4"></div>
                 <canvas id="performance-chart" width="400" height="200"></canvas>
             </div>
         </section>
         
-        <section id="security" class="mb-12">
+        <section id="security" class="mb-12 bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 transition-all duration-300">
             <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="mdi mdi-shield-check mr-2"></span> Security Scanner</h2>
             <form id="security-form" class="mb-6">
-                <div class="flex">
-                    <input type="url" id="security-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600">
-                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-r-lg hover:bg-indigo-700 transition duration-300">Scan Security</button>
+                <div class="flex flex-col md:flex-row">
+                    <input type="url" id="security-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 mb-2 md:mb-0 md:mr-2">
+                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition duration-300">Scan Security</button>
                 </div>
             </form>
             <div id="security-results" class="hidden">
                 <h3 class="text-xl font-semibold mb-4">Security Scan Results</h3>
-                <div id="security-score" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-4"></div>
-                <div id="security-issues" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md"></div>
+                <div id="security-score" class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md mb-4"></div>
+                <div id="security-issues" class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow-md"></div>
             </div>
         </section>
     </main>
     <footer class="bg-gray-800 text-white py-6">
         <div class="container mx-auto px-4 text-center">
-            <p>&copy; 2023 Advanced WordPress Toolkit Pro | <a href="https://github.com/advanced-wp-toolkit/pro" target="_blank" class="text-indigo-400 hover:text-indigo-300">GitHub Repository</a></p>
-            <p class="mt-2">Developed by <a href="https://example.com" target="_blank" class="text-indigo-400 hover:text-indigo-300">Your Company Name</a></p>
+            <p>&copy; 2023 Advanced WordPress Toolkit Pro | <a href="https://github.com/likhonsheikhcodes/WordPress-Importer/tree/main" target="_blank" class="text-indigo-400 hover:text-indigo-300 transition-colors duration-200">GitHub Repository</a></p>
+            <p class="mt-2">Developed by <a href="https://likhonsheikh.com" target="_blank" class="text-indigo-400 hover:text-indigo-300 transition-colors duration-200">Likhon Sheikh</a></p>
         </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
-
