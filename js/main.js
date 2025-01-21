@@ -263,9 +263,6 @@ document.addEventListener("DOMContentLoaded", () => {
     analysisContainer.innerHTML = `
             <p class="mb-2"><span class="font-semibold">Total Posts:</span> ${data.totalPosts}</p>
             <p class="mb-2"><span class="font-semibold">Total Pages:</span> ${data.totalPages}</p>
-            <p class="mb-2"><span class="I understand. I'll continue the text stream from the cut-off point:
-
-span> ${data.totalPages}</p>
             <p class="mb-2"><span class="font-semibold">Total Comments:</span> ${data.totalComments}</p>
             <p class="mb-2"><span class="font-semibold">Categories:</span> ${data.categories.join(", ")}</p>
             <p class="mb-2"><span class="font-semibold">Tags:</span> ${data.tags.join(", ")}</p>
@@ -590,18 +587,58 @@ span> ${data.totalPages}</p>
 
   function showNotification(message, type) {
     Swal.fire({
-      title: message,
-      icon: type,
-      toast: true,
-      position: "top-end",
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener("mouseenter", Swal.stopTimer)
-        toast.addEventListener("mouseleave", Swal.resumeTimer)
-      },
-    })
+            title: message,
+            icon: type,
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseHere's the continuation of the text stream from the cut-off point:
+
+true,
+            didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
   }
+
+  // Dark mode toggle
+  const darkModeToggle = document.querySelector("[x-data]")
+  darkModeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark")
+  })
+
+  // Automatic dark mode based on user's system preferences
+  if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    document.body.classList.add("dark")
+  }
+
+  // Lazy loading for images
+  const images = document.querySelectorAll("img[data-src]")
+  const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const img = entry.target
+        img.src = img.dataset.src
+        img.removeAttribute("data-src")
+        imageObserver.unobserve(img)
+      }
+    })
+  })
+
+  images.forEach((img) => imageObserver.observe(img))
+
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    anchor.addEventListener("click", function (e) {
+      e.preventDefault()
+      document.querySelector(this.getAttribute("href")).scrollIntoView({
+        behavior: "smooth",
+      })
+    })
+  })
 })
 
