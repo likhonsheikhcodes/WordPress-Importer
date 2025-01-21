@@ -3,58 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced WordPress Importer</title>
-    <meta name="description" content="A modern, advanced tool to import WordPress Extended RSS (WXR) files and extract posts, pages, comments, categories, and tags.">
-    <meta property="og:title" content="Advanced WordPress Importer">
-    <meta property="og:description" content="Import your WordPress content with ease using our advanced WXR importer.">
-    <meta property="og:image" content="https://example.com/og-image.jpg">
-    <meta property="og:url" content="https://example.com/wordpress-importer">
+    <title>Advanced WordPress Toolkit Pro | Enterprise-Grade WordPress Management</title>
+    <meta name="description" content="Comprehensive enterprise-grade toolkit for WordPress content management, analysis, optimization, and migration.">
+    <meta property="og:title" content="Advanced WordPress Toolkit Pro">
+    <meta property="og:description" content="Enterprise-level WordPress management, analysis, and optimization toolkit for professionals.">
+    <meta property="og:image" content="https://example.com/wp-toolkit-og-image.jpg">
+    <meta property="og:url" content="https://example.com/wp-toolkit-pro">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.5.95/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
     <script src="js/main.js" type="module" defer></script>
 </head>
-<body>
-    <header>
-        <h1><i class="fas fa-file-import"></i> Advanced WordPress Importer</h1>
+<body class="bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+    <header class="bg-indigo-600 text-white py-4 shadow-lg">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold flex items-center">
+                <span class="mdi mdi-wordpress mr-2"></span>
+                Advanced WordPress Toolkit Pro
+            </h1>
+        </div>
     </header>
-    <main>
-        <section id="file-upload">
-            <h2><i class="fas fa-upload"></i> Upload WXR File</h2>
-            <div id="drop-zone" class="drop-zone">
-                <p><i class="fas fa-cloud-upload-alt"></i> Drag & Drop your WXR file here or</p>
-                <input type="file" id="file-input" accept=".xml">
-                <label for="file-input" class="button"><i class="fas fa-folder-open"></i> Choose File</label>
+    <nav class="bg-white dark:bg-gray-800 shadow-md">
+        <div class="container mx-auto px-4">
+            <ul class="flex space-x-4 py-3">
+                <li><a href="#importer" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"><span class="mdi mdi-file-import mr-1"></span> WXR Importer</a></li>
+                <li><a href="#analyzer" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"><span class="mdi mdi-magnify mr-1"></span> Website Analyzer</a></li>
+                <li><a href="#detector" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"><span class="mdi mdi-puzzle mr-1"></span> Theme & Plugin Detector</a></li>
+                <li><a href="#seo-optimizer" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"><span class="mdi mdi-chart-line mr-1"></span> SEO Optimizer</a></li>
+                <li><a href="#performance" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"><span class="mdi mdi-speedometer mr-1"></span> Performance Analyzer</a></li>
+                <li><a href="#security" class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-200"><span class="mdi mdi-shield-check mr-1"></span> Security Scanner</a></li>
+            </ul>
+        </div>
+    </nav>
+    <main class="container mx-auto px-4 py-8">
+        <section id="importer" class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="mdi mdi-file-import mr-2"></span> WXR Importer</h2>
+            <div id="drop-zone" class="border-4 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition duration-300">
+                <p class="text-xl mb-4"><span class="mdi mdi-cloud-upload text-4xl block mb-2"></span> Drag & Drop your WXR file here or</p>
+                <input type="file" id="file-input" accept=".xml" class="hidden">
+                <label for="file-input" class="bg-indigo-600 text-white py-2 px-4 rounded-lg cursor-pointer hover:bg-indigo-700 transition duration-300">Choose File</label>
+            </div>
+            <div id="import-options" class="hidden mt-8">
+                <h3 class="text-xl font-semibold mb-4">Import Options</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" id="import-posts" checked class="form-checkbox text-indigo-600">
+                        <span>Import Posts</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" id="import-pages" checked class="form-checkbox text-indigo-600">
+                        <span>Import Pages</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" id="import-comments" checked class="form-checkbox text-indigo-600">
+                        <span>Import Comments</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" id="import-categories" checked class="form-checkbox text-indigo-600">
+                        <span>Import Categories</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" id="import-tags" checked class="form-checkbox text-indigo-600">
+                        <span>Import Tags</span>
+                    </label>
+                    <label class="flex items-center space-x-2">
+                        <input type="checkbox" id="import-media" checked class="form-checkbox text-indigo-600">
+                        <span>Import Media</span>
+                    </label>
+                </div>
+                <button id="start-import" class="mt-6 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300">Start Import</button>
+            </div>
+            <div id="import-progress" class="hidden mt-8">
+                <h3 class="text-xl font-semibold mb-4">Import Progress</h3>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div id="progress-bar" class="bg-green-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+                <p id="progress-text" class="mt-2 text-center">0% Complete</p>
+            </div>
+            <div id="import-results" class="hidden mt-8">
+                <h3 class="text-xl font-semibold mb-4">Import Results</h3>
+                <div id="results-container" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md"></div>
+                <button id="download-json" class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition duration-300">Download JSON</button>
             </div>
         </section>
-        <section id="import-options" class="hidden">
-            <h2><i class="fas fa-cogs"></i> Import Options</h2>
-            <div class="options-grid">
-                <label><input type="checkbox" id="import-posts" checked> <i class="fas fa-file-alt"></i> Import Posts</label>
-                <label><input type="checkbox" id="import-pages" checked> <i class="fas fa-file"></i> Import Pages</label>
-                <label><input type="checkbox" id="import-comments" checked> <i class="fas fa-comments"></i> Import Comments</label>
-                <label><input type="checkbox" id="import-categories" checked> <i class="fas fa-tags"></i> Import Categories</label>
-                <label><input type="checkbox" id="import-tags" checked> <i class="fas fa-tag"></i> Import Tags</label>
+        
+        <section id="analyzer" class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="mdi mdi-magnify mr-2"></span> Website Analyzer</h2>
+            <form id="analyzer-form" class="mb-6">
+                <div class="flex">
+                    <input type="url" id="website-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-r-lg hover:bg-indigo-700 transition duration-300">Analyze</button>
+                </div>
+            </form>
+            <div id="analyzer-results" class="hidden">
+                <h3 class="text-xl font-semibold mb-4">Analysis Results</h3>
+                <div id="analysis-container" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-4"></div>
+                <canvas id="analysis-chart" width="400" height="200"></canvas>
+                <button id="generate-xml" class="mt-4 bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition duration-300">Generate XML</button>
             </div>
-            <button id="start-import" class="button"><i class="fas fa-play"></i> Start Import</button>
         </section>
-        <section id="import-progress" class="hidden">
-            <h2><i class="fas fa-tasks"></i> Import Progress</h2>
-            <div id="progress-bar" class="progress-bar">
-                <div class="progress"></div>
+        
+        <section id="detector" class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="mdi mdi-puzzle mr-2"></span> Theme & Plugin Detector</h2>
+            <form id="detector-form" class="mb-6">
+                <div class="flex">
+                    <input type="url" id="detector-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-r-lg hover:bg-indigo-700 transition duration-300">Detect</button>
+                </div>
+            </form>
+            <div id="detector-results" class="hidden">
+                <h3 class="text-xl font-semibold mb-4">Detection Results</h3>
+                <div id="theme-info" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-4"></div>
+                <div id="plugin-list" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md"></div>
             </div>
-            <p id="progress-text">0% Complete</p>
         </section>
-        <section id="import-results" class="hidden">
-            <h2><i class="fas fa-chart-bar"></i> Import Results</h2>
-            <div id="results-container"></div>
-            <button id="download-json" class="button"><i class="fas fa-download"></i> Download JSON</button>
+        
+        <section id="seo-optimizer" class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="mdi mdi-chart-line mr-2"></span> SEO Optimizer</h2>
+            <form id="seo-form" class="mb-6">
+                <div class="flex">
+                    <input type="url" id="seo-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-r-lg hover:bg-indigo-700 transition duration-300">Analyze SEO</button>
+                </div>
+            </form>
+            <div id="seo-results" class="hidden">
+                <h3 class="text-xl font-semibold mb-4">SEO Analysis Results</h3>
+                <div id="seo-score" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-4"></div>
+                <div id="seo-recommendations" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md"></div>
+            </div>
+        </section>
+        
+        <section id="performance" class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="mdi mdi-speedometer mr-2"></span> Performance Analyzer</h2>
+            <form id="performance-form" class="mb-6">
+                <div class="flex">
+                    <input type="url" id="performance-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-r-lg hover:bg-indigo-700 transition duration-300">Analyze Performance</button>
+                </div>
+            </form>
+            <div id="performance-results" class="hidden">
+                <h3 class="text-xl font-semibold mb-4">Performance Analysis Results</h3>
+                <div id="performance-score" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-4"></div>
+                <canvas id="performance-chart" width="400" height="200"></canvas>
+            </div>
+        </section>
+        
+        <section id="security" class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 flex items-center"><span class="mdi mdi-shield-check mr-2"></span> Security Scanner</h2>
+            <form id="security-form" class="mb-6">
+                <div class="flex">
+                    <input type="url" id="security-url" placeholder="Enter website URL (e.g., https://example.com)" required class="flex-grow px-4 py-2 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                    <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-r-lg hover:bg-indigo-700 transition duration-300">Scan Security</button>
+                </div>
+            </form>
+            <div id="security-results" class="hidden">
+                <h3 class="text-xl font-semibold mb-4">Security Scan Results</h3>
+                <div id="security-score" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-4"></div>
+                <div id="security-issues" class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md"></div>
+            </div>
         </section>
     </main>
-    <footer>
-        <p>&copy; 2023 Advanced WordPress Importer | <a href="https://github.com/likhonsheikhcodes/WordPress-Importer" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a></p>
-        <p>Powered by <a href="https://t.me/likhonsheikh" target="_blank">Likhon Sheikh <i class="fab fa-telegram"></i></a></p>
+    <footer class="bg-gray-800 text-white py-6">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2023 Advanced WordPress Toolkit Pro | <a href="https://github.com/advanced-wp-toolkit/pro" target="_blank" class="text-indigo-400 hover:text-indigo-300">GitHub Repository</a></p>
+            <p class="mt-2">Developed by <a href="https://example.com" target="_blank" class="text-indigo-400 hover:text-indigo-300">Your Company Name</a></p>
+        </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </body>
 </html>
 
