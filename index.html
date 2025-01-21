@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced WordPress Importer</title>
+    <meta name="description" content="A modern, advanced tool to import WordPress Extended RSS (WXR) files and extract posts, pages, comments, categories, and tags.">
+    <meta property="og:title" content="Advanced WordPress Importer">
+    <meta property="og:description" content="Import your WordPress content with ease using our advanced WXR importer.">
+    <meta property="og:image" content="https://example.com/og-image.jpg">
+    <meta property="og:url" content="https://example.com/wordpress-importer">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js" type="module" defer></script>
+</head>
+<body>
+    <header>
+        <h1><i class="fas fa-file-import"></i> Advanced WordPress Importer</h1>
+    </header>
+    <main>
+        <section id="file-upload">
+            <h2><i class="fas fa-upload"></i> Upload WXR File</h2>
+            <div id="drop-zone" class="drop-zone">
+                <p><i class="fas fa-cloud-upload-alt"></i> Drag & Drop your WXR file here or</p>
+                <input type="file" id="file-input" accept=".xml">
+                <label for="file-input" class="button"><i class="fas fa-folder-open"></i> Choose File</label>
+            </div>
+        </section>
+        <section id="import-options" class="hidden">
+            <h2><i class="fas fa-cogs"></i> Import Options</h2>
+            <div class="options-grid">
+                <label><input type="checkbox" id="import-posts" checked> <i class="fas fa-file-alt"></i> Import Posts</label>
+                <label><input type="checkbox" id="import-pages" checked> <i class="fas fa-file"></i> Import Pages</label>
+                <label><input type="checkbox" id="import-comments" checked> <i class="fas fa-comments"></i> Import Comments</label>
+                <label><input type="checkbox" id="import-categories" checked> <i class="fas fa-tags"></i> Import Categories</label>
+                <label><input type="checkbox" id="import-tags" checked> <i class="fas fa-tag"></i> Import Tags</label>
+            </div>
+            <button id="start-import" class="button"><i class="fas fa-play"></i> Start Import</button>
+        </section>
+        <section id="import-progress" class="hidden">
+            <h2><i class="fas fa-tasks"></i> Import Progress</h2>
+            <div id="progress-bar" class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <p id="progress-text">0% Complete</p>
+        </section>
+        <section id="import-results" class="hidden">
+            <h2><i class="fas fa-chart-bar"></i> Import Results</h2>
+            <div id="results-container"></div>
+            <button id="download-json" class="button"><i class="fas fa-download"></i> Download JSON</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Advanced WordPress Importer | <a href="https://github.com/likhonsheikhcodes/WordPress-Importer" target="_blank"><i class="fab fa-github"></i> GitHub Repository</a></p>
+        <p>Powered by <a href="https://t.me/likhonsheikh" target="_blank">Likhon Sheikh <i class="fab fa-telegram"></i></a></p>
+    </footer>
+</body>
+</html>
+
