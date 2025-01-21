@@ -6,15 +6,36 @@ document.addEventListener("DOMContentLoaded", () => {
   const importOptions = document.getElementById("import-options")
   const startImportBtn = document.getElementById("start-import")
   const importProgress = document.getElementById("import-progress")
-  const progressBar = document.querySelector(".progress")
+  const progressBar = document.querySelector(".progress-bar")
   const progressText = document.getElementById("progress-text")
   const importResults = document.getElementById("import-results")
   const resultsContainer = document.getElementById("results-container")
   const downloadJsonBtn = document.getElementById("download-json")
+  const analyzerForm = document.getElementById("analyzer-form")
+  const analyzerResults = document.getElementById("analyzer-results")
+  const analysisContainer = document.getElementById("analysis-container")
+  const generateXmlBtn = document.getElementById("generate-xml")
+  const detectorForm = document.getElementById("detector-form")
+  const detectorResults = document.getElementById("detector-results")
+  const themeInfo = document.getElementById("theme-info")
+  const pluginList = document.getElementById("plugin-list")
+  const seoForm = document.getElementById("seo-form")
+  const seoResults = document.getElementById("seo-results")
+  const seoScore = document.getElementById("seo-score")
+  const seoRecommendations = document.getElementById("seo-recommendations")
+  const performanceForm = document.getElementById("performance-form")
+  const performanceResults = document.getElementById("performance-results")
+  const performanceScore = document.getElementById("performance-score")
+  const performanceChart = document.getElementById("performance-chart")
+  const securityForm = document.getElementById("security-form")
+  const securityResults = document.getElementById("security-results")
+  const securityScore = document.getElementById("security-score")
+  const securityIssues = document.getElementById("security-issues")
 
   let wxrContent = null
+  let analyzedData = null
 
-  // Drag and drop functionality
+  // WXR Importer functionality
   ;["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
     dropZone.addEventListener(eventName, preventDefaults, false)
   })
@@ -31,11 +52,11 @@ document.addEventListener("DOMContentLoaded", () => {
   })
 
   function highlight() {
-    dropZone.classList.add("highlight")
+    dropZone.classList.add("bg-indigo-100", "dark:bg-indigo-900")
   }
 
   function unhighlight() {
-    dropZone.classList.remove("highlight")
+    dropZone.classList.remove("bg-indigo-100", "dark:bg-indigo-900")
   }
 
   dropZone.addEventListener("drop", handleDrop, false)
@@ -99,6 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
       comments: [],
       categories: [],
       tags: [],
+      media: [],
     }
 
     const channel = data.rss.channel[0]
@@ -139,6 +161,15 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
 
+        if (document.getElementById("import-media").checked && postType === "attachment") {
+          const media = {
+            title: item.title[0],
+            url: item["wp:attachment_url"][0],
+            type: item["wp:post_mime_type"][0],
+          }
+          importData.media.push(media)
+        }
+
         updateProgress(++processedItems, totalItems)
         await new Promise((resolve) => setTimeout(resolve, 0)) // Allow UI to update
       }
@@ -170,6 +201,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateProgress(current, total) {
     const percentage = Math.round((current / total) * 100)
     progressBar.style.width = `${percentage}%`
+    progressBar.setAttribute("aria-valuenow", percentage)
     progressText.textContent = `${percentage}% Complete`
   }
 
@@ -179,11 +211,12 @@ document.addEventListener("DOMContentLoaded", () => {
     importResults.classList.add("fade-in")
 
     resultsContainer.innerHTML = `
-            <p><i class="fas fa-file-alt"></i> Posts imported: ${data.posts.length}</p>
-            <p><i class="fas fa-file"></i> Pages imported: ${data.pages.length}</p>
-            <p><i class="fas fa-comments"></i> Comments imported: ${data.comments.length}</p>
-            <p><i class="fas fa-tags"></i> Categories imported: ${data.categories.length}</p>
-            <p><i class="fas fa-tag"></i> Tags imported: ${data.tags.length}</p>
+            <p class="mb-2"><span class="font-semibold">Posts imported:</span> ${data.posts.length}</p>
+            <p class="mb-2"><span class="font-semibold">Pages imported:</span> ${data.pages.length}</p>
+            <p class="mb-2"><span class="font-semibold">Comments imported:</span> ${data.comments.length}</p>
+            <p class="mb-2"><span class="font-semibold">Categories imported:</span> ${data.categories.length}</p>
+            <p class="mb-2"><span class="font-semibold">Tags imported:</span> ${data.tags.length}</p>
+            <p class="mb-2"><span class="font-semibold">Media items imported:</span> ${data.media.length}</p>
         `
 
     downloadJsonBtn.addEventListener("click", () => {
@@ -199,21 +232,376 @@ document.addEventListener("DOMContentLoaded", () => {
     showNotification("Import completed successfully!", "success")
   }
 
-  function showNotification(message, type) {
-    const notification = document.createElement("div")
-    notification.textContent = message
-    notification.className = `notification ${type}`
-    document.body.appendChild(notification)
+  // Website Analyzer functionality
+  analyzerForm.addEventListener("submit", async (e) => {
+    e.preventDefault()
+    const url = document.getElementById("website-url").value
+    analyzedData = await analyzeWebsite(url)
+    displayAnalysisResults(analyzedData)
+  })
 
-    setTimeout(() => {
-      notification.classList.add("show")
-      setTimeout(() => {
-        notification.classList.remove("show")
-        setTimeout(() => {
-          notification.remove()
-        }, 300)
-      }, 3000)
-    }, 100)
+  async function analyzeWebsite(url) {
+    showNotification("Analyzing website...", "info")
+    try {
+      const response = await fetch(`https://api.example.com/analyze?url=${encodeURIComponent(url)}`)
+      if (!response.ok) {
+        throw new Error("Failed to analyze website")
+      }
+      const data = await response.json()
+      showNotification("Website analysis complete!", "success")
+      return data
+    } catch (error) {
+      console.error("Error analyzing website:", error)
+      showNotification("Error analyzing website. Please try again.", "error")
+    }
+  }
+
+  function displayAnalysisResults(data) {
+    analyzerResults.classList.remove("hidden")
+    analyzerResults.classList.add("fade-in")
+
+    analysisContainer.innerHTML = `
+            <p class="mb-2"><span class="font-semibold">Total Posts:</span> ${data.totalPosts}</p>
+            <p class="mb-2"><span class="font-semibold">Total Pages:</span> ${data.totalPages}</p>
+            <p class="mb-2"><span class="I understand. I'll continue the text stream from the cut-off point:
+
+span> ${data.totalPages}</p>
+            <p class="mb-2"><span class="font-semibold">Total Comments:</span> ${data.totalComments}</p>
+            <p class="mb-2"><span class="font-semibold">Categories:</span> ${data.categories.join(", ")}</p>
+            <p class="mb-2"><span class="font-semibold">Tags:</span> ${data.tags.join(", ")}</p>
+        `
+
+    const ctx = document.getElementById("analysis-chart").getContext("2d")
+    new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: ["Posts", "Pages", "Comments"],
+        datasets: [
+          {
+            data: [data.totalPosts, data.totalPages, data.totalComments],
+            backgroundColor: ["#4f46e5", "#10b981", "#f59e0b"],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "top",
+          },
+          title: {
+            display: true,
+            text: "Website Content Distribution",
+          },
+        },
+      },
+    })
+
+    generateXmlBtn.addEventListener("click", () => generateXML(data))
+  }
+
+  function generateXML(data) {
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+    xmlns:excerpt="http://wordpress.org/export/1.2/excerpt/"
+    xmlns:content="http://purl.org/rss/1.0/modules/content/"
+    xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:wp="http://wordpress.org/export/1.2/"
+>
+<channel>
+    ${data.posts
+      .map(
+        (post) => `
+    <item>
+        <title>${escapeXml(post.title)}</title>
+        <link>${escapeXml(post.link)}</link>
+        <pubDate>${post.pubDate}</pubDate>
+        <dc:creator>${escapeXml(post.author)}</dc:creator>
+        <content:encoded><![CDATA[${post.content}]]></content:encoded>
+    </item>
+    `,
+      )
+      .join("")}
+</channel>
+</rss>`
+
+    const blob = new Blob([xml], { type: "text/xml" })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement("a")
+    a.href = url
+    a.download = "wordpress_export.xml"
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  function escapeXml(unsafe) {
+    return unsafe.replace(/[<>&'"]/g, (c) => {
+      switch (c) {
+        case "<":
+          return "&lt;"
+        case ">":
+          return "&gt;"
+        case "&":
+          return "&amp;"
+        case "'":
+          return "&apos;"
+        case '"':
+          return "&quot;"
+      }
+    })
+  }
+
+  // Theme & Plugin Detector functionality
+  detectorForm.addEventListener("submit", async (e) => {
+    e.preventDefault()
+    const url = document.getElementById("detector-url").value
+    const detectionData = await detectThemeAndPlugins(url)
+    displayDetectionResults(detectionData)
+  })
+
+  async function detectThemeAndPlugins(url) {
+    showNotification("Detecting theme and plugins...", "info")
+    try {
+      const response = await fetch(`https://api.example.com/detect?url=${encodeURIComponent(url)}`)
+      if (!response.ok) {
+        throw new Error("Failed to detect theme and plugins")
+      }
+      const data = await response.json()
+      showNotification("Theme and plugin detection complete!", "success")
+      return data
+    } catch (error) {
+      console.error("Error detecting theme and plugins:", error)
+      showNotification("Error detecting theme and plugins. Please try again.", "error")
+    }
+  }
+
+  function displayDetectionResults(data) {
+    detectorResults.classList.remove("hidden")
+    detectorResults.classList.add("fade-in")
+
+    themeInfo.innerHTML = `
+            <h4 class="text-lg font-semibold mb-2">Detected Theme</h4>
+            <p class="mb-1"><span class="font-semibold">Name:</span> ${data.theme.name}</p>
+            <p class="mb-1"><span class="font-semibold">Version:</span> ${data.theme.version}</p>
+            <p class="mb-1"><span class="font-semibold">Author:</span> ${data.theme.author}</p>
+        `
+
+    pluginList.innerHTML = `
+            <h4 class="text-lg font-semibold mb-2">Detected Plugins</h4>
+            <ul class="list-disc pl-5">
+                ${data.plugins
+                  .map(
+                    (plugin) => `
+                    <li class="mb-2">
+                        <span class="font-semibold">${plugin.name}</span> (v${plugin.version}) by ${plugin.author}
+                    </li>
+                `,
+                  )
+                  .join("")}
+            </ul>
+        `
+  }
+
+  // SEO Optimizer functionality
+  seoForm.addEventListener("submit", async (e) => {
+    e.preventDefault()
+    const url = document.getElementById("seo-url").value
+    const seoData = await analyzeSEO(url)
+    displaySEOResults(seoData)
+  })
+
+  async function analyzeSEO(url) {
+    showNotification("Analyzing SEO...", "info")
+    try {
+      const response = await fetch(`https://api.example.com/seo?url=${encodeURIComponent(url)}`)
+      if (!response.ok) {
+        throw new Error("Failed to analyze SEO")
+      }
+      const data = await response.json()
+      showNotification("SEO analysis complete!", "success")
+      return data
+    } catch (error) {
+      console.error("Error analyzing SEO:", error)
+      showNotification("Error analyzing SEO. Please try again.", "error")
+    }
+  }
+
+  function displaySEOResults(data) {
+    seoResults.classList.remove("hidden")
+    seoResults.classList.add("fade-in")
+
+    seoScore.innerHTML = `
+            <h4 class="text-lg font-semibold mb-2">SEO Score: ${data.score}/100</h4>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                <div class="bg-blue-600 h-2.5 rounded-full" style="width: ${data.score}%"></div>
+            </div>
+        `
+
+    seoRecommendations.innerHTML = `
+            <h4 class="text-lg font-semibold mb-2">SEO Recommendations</h4>
+            <ul class="list-disc pl-5">
+                ${data.recommendations
+                  .map(
+                    (rec) => `
+                    <li class="mb-2">
+                        <span class="${rec.status === "good" ? "text-green-600" : "text-yellow-600"}">
+                            ${rec.status === "good" ? "✓" : "⚠"}
+                        </span>
+                        ${rec.message}
+                    </li>
+                `,
+                  )
+                  .join("")}
+            </ul>
+        `
+  }
+
+  // Performance Analyzer functionality
+  performanceForm.addEventListener("submit", async (e) => {
+    e.preventDefault()
+    const url = document.getElementById("performance-url").value
+    const performanceData = await analyzePerformance(url)
+    displayPerformanceResults(performanceData)
+  })
+
+  async function analyzePerformance(url) {
+    showNotification("Analyzing performance...", "info")
+    try {
+      const response = await fetch(`https://api.example.com/performance?url=${encodeURIComponent(url)}`)
+      if (!response.ok) {
+        throw new Error("Failed to analyze performance")
+      }
+      const data = await response.json()
+      showNotification("Performance analysis complete!", "success")
+      return data
+    } catch (error) {
+      console.error("Error analyzing performance:", error)
+      showNotification("Error analyzing performance. Please try again.", "error")
+    }
+  }
+
+  function displayPerformanceResults(data) {
+    performanceResults.classList.remove("hidden")
+    performanceResults.classList.add("fade-in")
+
+    performanceScore.innerHTML = `
+            <h4 class="text-lg font-semibold mb-2">Performance Score: ${data.score}/100</h4>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                <div class="bg-green-600 h-2.5 rounded-full" style="width: ${data.score}%"></div>
+            </div>
+        `
+
+    const ctx = performanceChart.getContext("2d")
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: [
+          "First Contentful Paint",
+          "Speed Index",
+          "Largest Contentful Paint",
+          "Time to Interactive",
+          "Total Blocking Time",
+          "Cumulative Layout Shift",
+        ],
+        datasets: [
+          {
+            label: "Performance Metrics",
+            data: [data.fcp, data.si, data.lcp, data.tti, data.tbt, data.cls],
+            backgroundColor: ["#4f46e5", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899"],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "top",
+          },
+          title: {
+            display: true,
+            text: "Performance Metrics",
+          },
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    })
+  }
+
+  // Security Scanner functionality
+  securityForm.addEventListener("submit", async (e) => {
+    e.preventDefault()
+    const url = document.getElementById("security-url").value
+    const securityData = await scanSecurity(url)
+    displaySecurityResults(securityData)
+  })
+
+  async function scanSecurity(url) {
+    showNotification("Scanning security...", "info")
+    try {
+      const response = await fetch(`https://api.example.com/security?url=${encodeURIComponent(url)}`)
+      if (!response.ok) {
+        throw new Error("Failed to scan security")
+      }
+      const data = await response.json()
+      showNotification("Security scan complete!", "success")
+      return data
+    } catch (error) {
+      console.error("Error scanning security:", error)
+      showNotification("Error scanning security. Please try again.", "error")
+    }
+  }
+
+  function displaySecurityResults(data) {
+    securityResults.classList.remove("hidden")
+    securityResults.classList.add("fade-in")
+
+    securityScore.innerHTML = `
+            <h4 class="text-lg font-semibold mb-2">Security Score: ${data.score}/100</h4>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                <div class="bg-green-600 h-2.5 rounded-full" style="width: ${data.score}%"></div>
+            </div>
+        `
+
+    securityIssues.innerHTML = `
+            <h4 class="text-lg font-semibold mb-2">Security Issues</h4>
+            <ul class="list-disc pl-5">
+                ${data.issues
+                  .map(
+                    (issue) => `
+                    <li class="mb-2">
+                        <span class="${issue.severity === "high" ? "text-red-600" : issue.severity === "medium" ? "text-yellow-600" : "text-blue-600"}">
+                            [${issue.severity.toUpperCase()}]
+                        </span>
+                        ${issue.message}
+                    </li>
+                `,
+                  )
+                  .join("")}
+            </ul>
+        `
+  }
+
+  function showNotification(message, type) {
+    Swal.fire({
+      title: message,
+      icon: type,
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener("mouseenter", Swal.stopTimer)
+        toast.addEventListener("mouseleave", Swal.resumeTimer)
+      },
+    })
   }
 })
 
